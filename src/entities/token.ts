@@ -2,9 +2,6 @@ import { Column, Entity, PrimaryColumn } from "typeorm";
 
 @Entity({ name: "Token" })
 export class Token {
-    constructor () {
-        this.created_at = new Date();
-    }
 
     @PrimaryColumn()
     access_token: string;
@@ -12,6 +9,6 @@ export class Token {
     @Column()
     expires_at: number;
 
-    @Column()
+    @Column({ type: "timestamp", default: () => "CURRENT_TIMESTAMP" })
     created_at: Date;
 }
