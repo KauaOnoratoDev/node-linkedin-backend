@@ -29,7 +29,8 @@ export class TokenRepository implements ITokenRepository {
 
     async getToken(): Promise<Token | null> {
         return this.tokenRepository.findOne({
-            order: { created_at: 'DESC' }
+            where: {},
+            order: { created_at: 'DESC' },
         });
     }
 
