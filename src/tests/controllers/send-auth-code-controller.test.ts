@@ -1,14 +1,14 @@
 import axios from 'axios';
 import { Request, Response } from 'express';
-import { SendAuthCodeController } from '../controllers/send-auth-code-controller';
-import { GetTokenUseCase } from '../use-cases/token/get-token-use-case';
-import { IsTokenNearingExpirationUseCase } from '../use-cases/token/is-token-nearing-expiration-use-case';
-import { Token } from '../entities/token';
+import { SendAuthCodeController } from '../../controllers/send-auth-code-controller';
+import { GetTokenUseCase } from '../../use-cases/token/get-token-use-case';
+import { IsTokenNearingExpirationUseCase } from '../../use-cases/token/is-token-nearing-expiration-use-case';
+import { Token } from '../../entities/token';
 
 // Mock das dependências externas
 jest.mock('axios');
-jest.mock('../use-cases/token/get-token-use-case');
-jest.mock('../use-cases/token/is-token-nearing-expiration-use-case');
+jest.mock('../../use-cases/token/get-token-use-case');
+jest.mock('../../use-cases/token/is-token-nearing-expiration-use-case');
 
 const mockAxios = axios as jest.Mocked<typeof axios>;
 

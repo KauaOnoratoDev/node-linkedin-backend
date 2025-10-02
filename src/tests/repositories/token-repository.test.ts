@@ -1,10 +1,10 @@
-import { TokenRepository, ITokenRequest } from '../repositories/token-repository';
-import { Token } from '../entities/token';
+import { TokenRepository, ITokenRequest } from '../../repositories/token-repository';
+import { Token } from '../../entities/token';
 import { Repository } from 'typeorm';
-import { Database } from '../config/database';
+import { Database } from '../../config/database';
 
 // Simula o módulo do Database para controlar a injeção de dependência
-jest.mock('../config/database');
+jest.mock('../../config/database');
 
 describe('TokenRepository', () => {
   let tokenRepository: TokenRepository;
@@ -70,7 +70,12 @@ describe('TokenRepository', () => {
       const token = await tokenRepository.getToken();
 
       // Verifica se findOne foi chamado com a ordenação correta
-      expect(mockTypeOrmRepo.findOne).toHaveBeenCalledWith({ order: { created_at: 'DESC' } });
+      expect(mockTypeOrmRepo.findOne).toHaveBeenCalledWith(
+        {
+            where: {},
+            order: { created_at: 'DESC' },
+        }
+      );
       expect(token).toEqual(mockToken);
     });
   });

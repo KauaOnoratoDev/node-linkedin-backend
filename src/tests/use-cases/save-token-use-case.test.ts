@@ -1,10 +1,10 @@
-import { SaveTokenUseCase } from '../use-cases/token/save-token-use-case';
-import { ITokenRequest, TokenRepository } from '../repositories/token-repository';
-import { Token } from '../entities/token';
+import { SaveTokenUseCase } from '../../use-cases/token/save-token-use-case';
+import { ITokenRequest, TokenRepository } from '../../repositories/token-repository';
+import { Token } from '../../entities/token';
 
 // 1. Mocka o módulo do TokenRepository. O Jest substituirá a classe real
 // por uma versão simulada, permitindo que controlemos seus métodos.
-jest.mock('../repositories/token-repository');
+jest.mock('../../repositories/token-repository');
 
 describe('SaveTokenUseCase', () => {
   let saveTokenUseCase: SaveTokenUseCase;

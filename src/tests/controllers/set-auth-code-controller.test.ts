@@ -1,11 +1,11 @@
 import axios from 'axios';
 import { Request, Response } from 'express';
-import { SetAuthCodeController } from '../controllers/set-auth-code-controller';
-import { SaveTokenUseCase } from '../use-cases/token/save-token-use-case';
+import { SetAuthCodeController } from '../../controllers/set-auth-code-controller';
+import { SaveTokenUseCase } from '../../use-cases/token/save-token-use-case';
 
 // Mock das dependências externas
 jest.mock('axios');
-jest.mock('../use-cases/token/save-token-use-case');
+jest.mock('../../use-cases/token/save-token-use-case');
 
 const mockAxios = axios as jest.Mocked<typeof axios>;
 

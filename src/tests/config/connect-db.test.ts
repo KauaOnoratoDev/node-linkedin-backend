@@ -1,5 +1,5 @@
-import { Database } from '../config/database';
-import { AppDataSource } from '../config/data-source';
+import { Database } from '../../config/database';
+import { AppDataSource } from '../../config/data-source';
 
 
 describe('Conexao com o banco de dados', () => {

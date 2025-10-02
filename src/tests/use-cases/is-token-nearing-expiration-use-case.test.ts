@@ -1,9 +1,9 @@
-import { IsTokenNearingExpirationUseCase } from '../use-cases/token/is-token-nearing-expiration-use-case';
-import { TokenRepository } from '../repositories/token-repository';
-import { Token } from '../entities/token';
+import { IsTokenNearingExpirationUseCase } from '../../use-cases/token/is-token-nearing-expiration-use-case';
+import { TokenRepository } from '../../repositories/token-repository';
+import { Token } from '../../entities/token';
 
 // Mocka o módulo do TokenRepository para testar o caso de uso de forma isolada.
-jest.mock('../repositories/token-repository');
+jest.mock('../../repositories/token-repository');
 
 describe('IsTokenNearingExpirationUseCase Use Case', () => {
   let isTokenNearingExpirationUseCase: IsTokenNearingExpirationUseCase;
