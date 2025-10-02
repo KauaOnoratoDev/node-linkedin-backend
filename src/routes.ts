@@ -1,9 +1,11 @@
 import { Router } from "express";
-import { 
-    loginController, 
-    sendAuthController, 
-    setAuthController 
+import {
+    loginController,
+    sendAuthController,
+    setAuthController,
+    uploadImageController
 } from "./config/instances";
+import { upload } from "./config/multer";
 
 
 const router = Router();
@@ -11,6 +13,7 @@ const router = Router();
 router.get('/login', (req, res) => loginController.handle(req, res));
 router.get('/auth', (req, res) => setAuthController.handle(req, res));
 router.get('/send', (req, res) => sendAuthController.handle(req, res));
-
+router.post('/upload',
+    upload.single('image'), (req, res) => uploadImageController.handle(req, res));
 
 export default router;

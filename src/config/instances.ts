@@ -7,6 +7,7 @@ import { TokenRepository } from "../repositories/token-repository";
 import { GetTokenUseCase } from "../use-cases/token/get-token-use-case";
 import { IsTokenNearingExpirationUseCase } from "../use-cases/token/is-token-nearing-expiration-use-case";
 import { SaveTokenUseCase } from "../use-cases/token/save-token-use-case";
+import { UploadImageController } from "../controllers/upload-image-controller";
 
 
 config();
@@ -17,7 +18,6 @@ const client_id = process.env.CLIENT_ID || '';
 const client_secret = process.env.CLIENT_SECRET || '';
 const scope = process.env.SCOPE || '';
 const webhook_url = process.env.WEBHOOK_URL || '';
-
 
 
 // Repositorio
@@ -46,3 +46,4 @@ export const sendAuthController = new SendAuthCodeController(
     isTokenNearingExpirationUseCase,
     webhook_url
 );
+export const uploadImageController = new UploadImageController();
