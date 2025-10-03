@@ -1,7 +1,7 @@
 import { config } from "dotenv";
 
 import { LoginController } from "../controllers/login-controller";
-import { SendAuthCodeController } from "../controllers/send-auth-code-controller";
+import { GetAuthCodeController } from "../controllers/get-auth-code-controller";
 import { SetAuthCodeController } from "../controllers/set-auth-code-controller";
 import { TokenRepository } from "../repositories/token-repository";
 import { GetTokenUseCase } from "../use-cases/token/get-token-use-case";
@@ -41,9 +41,8 @@ export const setAuthController = new SetAuthCodeController(
     client_id,
     client_secret
 );
-export const sendAuthController = new SendAuthCodeController(
+export const getAuthController = new GetAuthCodeController(
     getTokenUseCase,
     isTokenNearingExpirationUseCase,
-    webhook_url
 );
 export const uploadImageController = new UploadImageController();

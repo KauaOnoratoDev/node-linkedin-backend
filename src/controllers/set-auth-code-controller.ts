@@ -49,7 +49,7 @@ export class SetAuthCodeController {
             expires_in: response.data.expires_in,
         });
 
-        res.redirect('/send');
+        res.status(200).json({ message: 'Access token saved successfully.' });
     } catch (error) {
         let errorMessage = 'An unknown error occurred.';
         if (error instanceof Error) {

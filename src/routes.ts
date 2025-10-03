@@ -1,7 +1,7 @@
 import { Router } from "express";
 import {
     loginController,
-    sendAuthController,
+    getAuthController,
     setAuthController,
     uploadImageController
 } from "./config/instances";
@@ -12,7 +12,7 @@ const router = Router();
 
 router.get('/login', (req, res) => loginController.handle(req, res));
 router.get('/auth', (req, res) => setAuthController.handle(req, res));
-router.get('/send', (req, res) => sendAuthController.handle(req, res));
+router.get('/get', (req, res) => getAuthController.handle(req, res));
 router.post('/upload',
     upload.single('image'), (req, res) => uploadImageController.handle(req, res));
 
