@@ -57,3 +57,6 @@ export const registerUploadRequest = new RegisterUploadLinkedinController(
 export const uploadLinkedinImageController = new UploadLinkedinImageController(
     getTokenUseCase
 );
+export const publishLinkedinController = new PublishLinkedinController(
+    getTokenUseCase
+);
