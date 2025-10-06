@@ -17,6 +17,7 @@ describe('GetAuthCodeController', () => {
   let responseStatus: jest.Mock;
   let responseJson: jest.Mock;
 
+  const API_KEY = '123';
   beforeEach(() => {
     // Cria mocks para os use cases e para os objetos de request/response
     mockGetTokenUseCase = new (GetTokenUseCase as any)() as jest.Mocked<GetTokenUseCase>;
@@ -24,15 +25,19 @@ describe('GetAuthCodeController', () => {
 
     getAuthCodeController = new GetAuthCodeController(
       mockGetTokenUseCase,
-      mockIsTokenNearingExpirationUseCase
-    );
+      mockIsTokenNearingExpirationUseCase,
+      API_KEY
+    ); 
 
     responseJson = jest.fn();
     responseStatus = jest.fn(() => ({ json: responseJson }));
     mockResponse = {
       status: responseStatus,
     };
-    mockRequest = {};
+    // Adiciona o cabeçalho esperado pelo controller para os casos de sucesso
+    mockRequest = {
+      headers: { 'api-key': API_KEY }
+    };
   });
 
   afterEach(() => {
@@ -53,7 +58,7 @@ describe('GetAuthCodeController', () => {
     expect(mockGetTokenUseCase.execute).toHaveBeenCalledTimes(1);
     expect(mockIsTokenNearingExpirationUseCase.execute).toHaveBeenCalledWith(validToken);
     expect(responseStatus).toHaveBeenCalledWith(200);
-    expect(responseJson).toHaveBeenCalledWith({ access_token: validToken });
+    expect(responseJson).toHaveBeenCalledWith({ access_token: validToken.access_token });
   });
 
   it('deve retornar 404 se nenhum token for encontrado', async () => {
@@ -81,5 +86,20 @@ describe('GetAuthCodeController', () => {
     // Assert
     expect(responseStatus).toHaveBeenCalledWith(401);
     expect(responseJson).toHaveBeenCalledWith({ error: 'Token is nearing expiration.' });
+  });
+
+  it('deve retornar 401 se a api-key for inválida ou não for fornecida', async () => {
+    // Arrange
+    mockRequest = { headers: { 'api-key': 'wrong-key' } };
+
+    // Act
+    await getAuthCodeController.handle(mockRequest as Request, mockResponse as Response);
+
+    // Assert
+    expect(responseStatus).toHaveBeenCalledWith(401);
+    expect(responseJson).toHaveBeenCalledWith({ error: 'Unauthorized.' });
+    // Garante que os outros use cases não foram chamados
+    expect(mockGetTokenUseCase.execute).not.toHaveBeenCalled();
+    expect(mockIsTokenNearingExpirationUseCase.execute).not.toHaveBeenCalled();
   });
 });
