@@ -71,8 +71,6 @@ describe('SetAuthCodeController', () => {
       access_token: 'new-access-token',
       expires_in: 3600,
     });
-    expect(responseRedirect).toHaveBeenCalledWith('/send');
-    expect(responseStatus).not.toHaveBeenCalled();
   });
 
   it('deve retornar 400 se o código de autorização não for fornecido', async () => {

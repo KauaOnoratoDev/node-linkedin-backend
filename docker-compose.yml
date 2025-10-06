@@ -14,5 +14,41 @@ services:
       - "5432:5432"
     restart: unless-stopped
 
+  n8n:
+    image: docker.n8n.io/n8nio/n8n
+    container_name: n8n
+    ports:
+      - "5678:5678"
+    environment:
+      GENERIC_TIMEZONE: ${GENERIC_TIMEZONE}
+      N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS: "true"
+      N8N_RUNNERS_ENABLED: "true"
+      N8N_BASIC_AUTH_ACTIVE: "true"
+    volumes:
+      - n8n_data:/home/node/.n8n
+    restart: unless-stopped
+
+  app:
+    build:
+      context: .
+    container_name: app
+    depends_on:
+      - postgres
+      - n8n
+    ports:
+      - "3000:3000"
+    environment:
+      CLIENT_ID: ${CLIENT_ID}
+      CLIENT_SECRET: ${CLIENT_SECRET}
+      REDIRECT_URI: ${REDIRECT_URI}
+      SCOPE: ${SCOPE}
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
+      DB_DATABASE: ${DB_DATABASE}
+      DB_HOST: ${DB_HOST}
+      DB_PORT: ${DB_PORT}
+    entrypoint: ["npm", "run", "docker:config"]
+
 volumes:
   pg_data:
+  n8n_data:
