@@ -8,6 +8,7 @@ import { GetTokenUseCase } from "../use-cases/token/get-token-use-case";
 import { IsTokenNearingExpirationUseCase } from "../use-cases/token/is-token-nearing-expiration-use-case";
 import { SaveTokenUseCase } from "../use-cases/token/save-token-use-case";
 import { UploadImageController } from "../controllers/upload-image-controller";
+import { RegisterUploadLinkedinController } from "../controllers/register-upload-linkedin-controller";
 
 
 config();
@@ -47,3 +48,7 @@ export const getAuthController = new GetAuthCodeController(
     api_key
 );
 export const uploadImageController = new UploadImageController();
+export const registerUploadRequest = new RegisterUploadLinkedinController(
+    "https://api.linkedin.com/v2/assets?action=registerUpload",
+    getTokenUseCase
+);

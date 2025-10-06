@@ -3,7 +3,8 @@ import {
     loginController,
     getAuthController,
     setAuthController,
-    uploadImageController
+    uploadImageController,
+    registerUploadRequest
 } from "./config/instances";
 import { upload } from "./config/multer";
 
@@ -15,5 +16,6 @@ router.get('/auth', (req, res) => setAuthController.handle(req, res));
 router.get('/get', (req, res) => getAuthController.handle(req, res));
 router.post('/upload',
     upload.single('image'), (req, res) => uploadImageController.handle(req, res));
+router.post('/registerUpload', (req, res) => registerUploadRequest.handle(req, res));
 
 export default router;
