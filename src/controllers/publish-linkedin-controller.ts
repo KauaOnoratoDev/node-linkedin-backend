@@ -16,7 +16,7 @@ export class PublishLinkedinController {
             "Authorization": `Bearer ${token?.access_token}`,
             "Content-Type": "application/json",
         }
-        const { sub, media} = req.body;
+        const { sub, media, text} = req.body;
 
         const data = {
             "author": `urn:li:person:${sub}`,
@@ -24,7 +24,7 @@ export class PublishLinkedinController {
             "specificContent": {
                 "com.linkedin.ugc.ShareContent": {
                     "shareCommentary": {
-                        "text": "Feeling inspired after meeting so many talented individuals at this year's conference. #talentconnect"
+                        "text": `${text}`
                     },
                     "shareMediaCategory": "IMAGE",
                     "media": [
