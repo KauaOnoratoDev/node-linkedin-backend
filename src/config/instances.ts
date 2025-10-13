@@ -20,7 +20,6 @@ const redirect_uri = process.env.REDIRECT_URI || '';
 const client_id = process.env.CLIENT_ID || '';
 const client_secret = process.env.CLIENT_SECRET || '';
 const scope = process.env.SCOPE || '';
-const api_key = process.env.API_KEY || '';
 
 
 // Repositorio
@@ -47,7 +46,6 @@ export const setAuthController = new SetAuthCodeController(
 export const getAuthController = new GetAuthCodeController(
     getTokenUseCase,
     isTokenNearingExpirationUseCase,
-    api_key
 );
 export const uploadImageController = new UploadImageController();
 export const registerUploadRequest = new RegisterUploadLinkedinController(

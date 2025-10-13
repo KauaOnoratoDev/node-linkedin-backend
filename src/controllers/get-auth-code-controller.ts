@@ -5,22 +5,16 @@ import { IsTokenNearingExpirationUseCase } from "../use-cases/token/is-token-nea
 export class GetAuthCodeController {
     private getTokenUseCase: GetTokenUseCase;
     private isTokenNearingExpirationUseCase: IsTokenNearingExpirationUseCase;
-    private api_key: string;
 
     constructor (
         getTokenUseCase: GetTokenUseCase,
         isTokenNearingExpirationUseCase: IsTokenNearingExpirationUseCase,
-        api_key: string
     ) {
         this.getTokenUseCase = getTokenUseCase;
         this.isTokenNearingExpirationUseCase = isTokenNearingExpirationUseCase;
-        this.api_key = api_key;
     }
 
     async handle (req: Request, res: Response): Promise<Response | void> {
-        if (req.headers['api-key'] !== this.api_key) {
-            return res.status(401).json({ error: 'Unauthorized.' });
-        }
 
         const token = await this.getTokenUseCase.execute();
         
