@@ -1,0 +1,22 @@
+# ===============================
+# 🗄️  DATABASE (PostgreSQL)
+# ===============================
+DB_USER="your_database_user"
+DB_PASSWORD="your_database_password"
+DB_DATABASE="your_database_name"
+DB_PORT=5432
+DB_HOST="your_database_host"
+
+# ===============================
+# ⚙️  APPLICATION CONFIG
+# ===============================
+CLIENT_ID="your_client_id"
+CLIENT_SECRET="your_client_secret"
+REDIRECT_URI="http://localhost:3000/auth"
+SCOPE="profile email w_member_social openid"
+API_KEY="your_api_key"
+
+# ===============================
+# 🧭  N8N SETTINGS
+# ===============================
+GENERIC_TIMEZONE="America/Sao_Paulo"
