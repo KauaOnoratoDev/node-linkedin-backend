@@ -1,0 +1,488 @@
+{
+  "name": "linkedin-n8n",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {}
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -496,
+        400
+      ],
+      "id": "4b886826-e947-404f-aa33-faa99fcafaab",
+      "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {
+        "url": "http://app:3000/get",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "api-key",
+              "value": "123"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -208,
+        400
+      ],
+      "id": "31e24203-ba1f-4a00-93cc-4c67bfc245a6",
+      "name": "Get Linkedin Access Token"
+    },
+    {
+      "parameters": {
+        "url": "https://api.linkedin.com/v2/userinfo",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "=Bearer {{ $json.access_token }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        112,
+        400
+      ],
+      "id": "25afce68-2085-4852-b68b-6f805b35d734",
+      "name": "Get user information"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://app:3000/registerUpload",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "api-key",
+              "value": "123"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "sub",
+              "value": "={{ $json.sub }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        352,
+        560
+      ],
+      "id": "0a0470ee-8d0d-4075-869d-83b9a140dbf9",
+      "name": "Post register upload"
+    },
+    {
+      "parameters": {
+        "mode": "combineBySql",
+        "numberInputs": 3,
+        "query": "SELECT * FROM input1 LEFT JOIN input2 LEFT JOIN input3",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        560,
+        384
+      ],
+      "id": "9ec61086-b665-43f4-8609-33c102b85a71",
+      "name": "Merge"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "808ee36b-f9e2-48d1-87b1-4a56cab6ca27",
+              "name": "sub",
+              "value": "={{ $json.sub }}",
+              "type": "string"
+            },
+            {
+              "id": "498e6c4a-5760-4ddf-8a46-c37b9e719fc0",
+              "name": "media",
+              "value": "={{ $json.value.asset }}",
+              "type": "string"
+            },
+            {
+              "id": "2ae3f43f-193e-4fc1-8d59-556a70be6739",
+              "name": "uploadUrl",
+              "value": "={{ $json.value.uploadMechanism['com.linkedin.digitalmedia.uploading.MediaUploadHttpRequest'].uploadUrl }}",
+              "type": "string"
+            },
+            {
+              "id": "3ac1f015-a2a4-4f23-9c04-2130e0896d36",
+              "name": "text",
+              "value": "={{ $json.output }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        880,
+        400
+      ],
+      "id": "783cf761-de7b-4091-878a-0ee7d234a85f",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "Você é um desenvolvedor experiente e precisa pensar em ideias para suas postagens no linkedin, seu objetivo é movimentar mais sua rede e ter um melhor engajamento com suas conexões. Pense em ideias de postagens envolvendo assuntos da tecnologia moderna.\n\nVocê deve retornar um texto apenas com o conteúdo da publicação, falando sobre algum assunto interessante no mundo da tecnologia, sem asteriscos, apenas emojis",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        0,
+        0
+      ],
+      "id": "555f7b4c-a9ba-45d0-a2d2-52a5ec01476e",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-2.5-flash-lite",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        -64,
+        160
+      ],
+      "id": "2d5cbf30-7142-4213-a0ae-3bdf75dc2bd1",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "NKmTRJaqJYpqOcRB",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://app:3000/uploadLinkedinImage",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "api-key",
+              "value": "123"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "uploadUrl",
+              "value": "={{ $json.uploadUrl }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1216,
+        512
+      ],
+      "id": "4aec0156-37ae-4307-85d1-d3f2cb6459a3",
+      "name": "Post upload linkedin image"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://app:3000/publish",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "api-key",
+              "value": "123"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "sub",
+              "value": "={{ $json.sub }}"
+            },
+            {
+              "name": "media",
+              "value": "={{ $json.media }}"
+            },
+            {
+              "name": "text",
+              "value": "={{ $json.text }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1216,
+        304
+      ],
+      "id": "97849c4f-fda8-45df-a1ac-2547cf736ce9",
+      "name": "Post publication",
+      "executeOnce": false
+    },
+    {
+      "parameters": {
+        "resource": "image",
+        "modelId": {
+          "__rl": true,
+          "value": "models/gemini-2.0-flash-preview-image-generation",
+          "mode": "list",
+          "cachedResultName": "models/gemini-2.0-flash-preview-image-generation"
+        },
+        "prompt": "=Leia atentamente o texto abaixo e imagine uma imagem que transmita exatamente a ideia e o sentimento que ele quer passar.\nA imagem deve ser visual e conceitual, sem incluir textos longos.\nSe for realmente necessário incluir texto, use apenas uma ou poucas palavras curtas, escritas de forma clara e legível.\nEvite qualquer frase extensa, parágrafos, slogans ou textos complexos.\nFoque em cores, formas, expressões e elementos visuais que comuniquem a mensagem principal do texto.\n\nTexto:\n{{ $json.output }}",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.googleGemini",
+      "typeVersion": 1,
+      "position": [
+        496,
+        0
+      ],
+      "id": "4c1b736d-ef5d-4299-8790-33d8775e573a",
+      "name": "Generate an image",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "NKmTRJaqJYpqOcRB",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://app:3000/upload",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "api-key",
+              "value": "123"
+            }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "multipart-form-data",
+        "bodyParameters": {
+          "parameters": [
+            {
+              "parameterType": "formBinaryData",
+              "name": "image",
+              "inputDataFieldName": "data"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        816,
+        0
+      ],
+      "id": "a4f86e78-8fc0-4da2-b201-621ed442fb2d",
+      "name": "HTTP Request"
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "1234"
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        48,
+        160
+      ],
+      "id": "7faf24fa-12a2-4436-b259-98f92b4fb917",
+      "name": "Simple Memory"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Get Linkedin Access Token",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Linkedin Access Token": {
+      "main": [
+        [
+          {
+            "node": "Get user information",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get user information": {
+      "main": [
+        [
+          {
+            "node": "Post register upload",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Post register upload": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 2
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Post upload linkedin image",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Post publication",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Generate an image",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generate an image": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "1915b1ea-10fa-4785-a751-1348d555e958",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "88a84a7c29d24be65c1e04f0a5dadbcdf594e925c36152bc5fd004558e08aa82"
+  },
+  "id": "ZiZRTVwLO5cPDoh0",
+  "tags": []
+}
